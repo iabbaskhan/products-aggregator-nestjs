@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: product-aggregator-postgres
+    environment:
+      POSTGRES_DB: product_aggregator
+      POSTGRES_HOST_AUTH_METHOD: trust   # allow connections without password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      args:
+        INFISICAL_MACHINE_IDENTITY_CLIENT_ID: ${INFISICAL_MACHINE_IDENTITY_CLIENT_ID}
+        INFISICAL_MACHINE_IDENTITY_CLIENT_SECRET: ${INFISICAL_MACHINE_IDENTITY_CLIENT_SECRET}
+        INFISICAL_ENVIRONMENT: ${INFISICAL_ENVIRONMENT}
+        INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID}
+    container_name: product-aggregator-app
+    ports:
+      - "3060:3060"
+    environment:
+      NODE_ENV: development
+      PORT: 3060
+      INFISICAL_MACHINE_IDENTITY_CLIENT_ID: ${INFISICAL_MACHINE_IDENTITY_CLIENT_ID}
+      INFISICAL_MACHINE_IDENTITY_CLIENT_SECRET: ${INFISICAL_MACHINE_IDENTITY_CLIENT_SECRET}
+      INFISICAL_ENVIRONMENT: ${INFISICAL_ENVIRONMENT}
+      INFISICAL_PROJECT_ID: ${INFISICAL_PROJECT_ID}
+      DATA_STALENESS_MINUTES: 10
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

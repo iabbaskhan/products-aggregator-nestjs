@@ -1,0 +1,483 @@
+{
+  "info": {
+    "name": "Product Aggregator API",
+    "description": "Complete API collection for Product Aggregator Service with authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "api_key",
+      "value": "secret-api-key",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkFQSSBVc2VyIiwiZW1haWwiOiJhcGlAcHJvZHVjdGFnZ3JlZ2F0b3IuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzU5MzMzMDY4LCJleHAiOjE3OTA4NjkwNjgsImlzcyI6InByb2R1Y3QtYWdncmVnYXRvci1hcGkiLCJhdWQiOiJwcm9kdWN0LWFnZ3JlZ2F0b3ItY2xpZW50In0.0J4ZnO_7qGc1QaL5g96F8vPtiRkGVpUL3FMlydZLu30",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Generate JWT Token (Manual)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api",
+              "host": ["{{base_url}}"],
+              "path": ["api"]
+            },
+            "description": "Visit Swagger UI to generate JWT token manually. Use the provided JWT secret: jwt-secret-key"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products?page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page (default: 20, max: 100)"
+                }
+              ]
+            },
+            "description": "Get all products with optional filtering and pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Products with Filters",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products?name=headphones&minPrice=50&maxPrice=200&availability=true&currency=USD&page=1&limit=10",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products"],
+              "query": [
+                {
+                  "key": "name",
+                  "value": "headphones",
+                  "description": "Filter by product name"
+                },
+                {
+                  "key": "minPrice",
+                  "value": "50",
+                  "description": "Minimum price filter (numeric string)"
+                },
+                {
+                  "key": "maxPrice",
+                  "value": "200",
+                  "description": "Maximum price filter (numeric string)"
+                },
+                {
+                  "key": "availability",
+                  "value": "true",
+                  "description": "Filter by availability (use 'true' or 'false' as string)"
+                },
+                {
+                  "key": "currency",
+                  "value": "USD",
+                  "description": "Filter by currency"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Items per page"
+                }
+              ]
+            },
+            "description": "Get products with various filters applied"
+          },
+          "response": []
+        },
+        {
+          "name": "Search Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/search?q=wireless&page=1&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "search"],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "wireless",
+                  "description": "Search query (required)"
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "description": "Page number (default: 1)"
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Items per page (default: 20)"
+                }
+              ]
+            },
+            "description": "Search products by name or description"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Statistics",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/statistics",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "statistics"]
+            },
+            "description": "Get product statistics including total products, availability, and price ranges"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stale Products",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/stale",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "stale"]
+            },
+            "description": "Get products that haven't been updated recently (stale data)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Products with Changes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/changes?startDate=2024-01-01T00:00:00Z&endDate=2024-12-31T23:59:59Z&limit=100",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "changes"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01T00:00:00Z",
+                  "description": "Start date (ISO string) - required"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-12-31T23:59:59Z",
+                  "description": "End date (ISO string) - required"
+                },
+                {
+                  "key": "limit",
+                  "value": "100",
+                  "description": "Maximum changes to return (default: 100, max: 1000)"
+                }
+              ]
+            },
+            "description": "Get products that have had price or availability changes within a specified timeframe"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Recent Changes (Last 24 Hours)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/changes?startDate={{$isoTimestamp}}&endDate={{$now}}&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "changes"],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "{{$isoTimestamp}}",
+                  "description": "24 hours ago (use Postman dynamic variable)"
+                },
+                {
+                  "key": "endDate",
+                  "value": "{{$now}}",
+                  "description": "Current time (use Postman dynamic variable)"
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Limit to 50 recent changes"
+                }
+              ]
+            },
+            "description": "Get recent product changes from the last 24 hours using Postman dynamic variables"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "{{product_id}}"]
+            },
+            "description": "Get a specific product by ID with price history. Replace {{product_id}} with actual product ID from previous requests."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Product Price History",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{api_key}}",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/{{product_id}}/price-history?limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "{{product_id}}", "price-history"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum history entries (default: 50, max: 200)"
+                }
+              ]
+            },
+            "description": "Get price history for a specific product. Replace {{product_id}} with actual product ID."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Real-time Streaming",
+      "item": [
+        {
+          "name": "SSE Stream - Product Changes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/event-stream",
+                "type": "text"
+              },
+              {
+                "key": "Cache-Control",
+                "value": "no-cache",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/products/changes/stream",
+              "host": ["{{base_url}}"],
+              "path": ["api", "products", "changes", "stream"]
+            },
+            "description": "Stream product changes in real-time using Server-Sent Events. This will keep the connection open and send updates every 5 seconds. No authentication required."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Visualization",
+      "item": [
+        {
+          "name": "Real-time Visualization Page",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/visualization",
+              "host": ["{{base_url}}"],
+              "path": ["visualization"]
+            },
+            "description": "Get the HTML visualization page for real-time product monitoring. This endpoint doesn't require authentication."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "API Documentation",
+      "item": [
+        {
+          "name": "Swagger UI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api",
+              "host": ["{{base_url}}"],
+              "path": ["api"]
+            },
+            "description": "Access the interactive Swagger API documentation"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-generate timestamps for recent changes requests",
+          "const now = new Date();",
+          "const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);",
+          "",
+          "pm.globals.set('now', now.toISOString());",
+          "pm.globals.set('yesterday', yesterday.toISOString());"
+        ]
+      }
+    }
+  ]
+}
